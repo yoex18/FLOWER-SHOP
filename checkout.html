@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Checkout - Bloom Bliss</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(to bottom, #fff0f5, #ffffff);
+      margin: 0;
+      padding: 0;
+      color: #333;
+    }
+
+    header {
+      background: #fff0f5;
+      padding: 20px 10%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+
+    header h1 {
+      color: #d63384;
+    }
+
+    nav a {
+      margin-left: 20px;
+      text-decoration: none;
+      color: #d63384;
+      font-weight: 600;
+    }
+
+    h2 {
+      text-align: center;
+      margin-top: 40px;
+      color: #d63384;
+    }
+
+    .checkout-container {
+      max-width: 800px;
+      margin: 40px auto;
+      background: #fff;
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+    }
+
+    .order-summary ul {
+      list-style: none;
+      padding: 0;
+      margin-bottom: 20px;
+    }
+
+    .order-summary li {
+      display: flex;
+      justify-content: space-between;
+      padding: 10px 0;
+      border-bottom: 1px solid #eee;
+    }
+
+    .total-amount {
+      text-align: right;
+      font-size: 1.2rem;
+      font-weight: bold;
+      margin-bottom: 30px;
+      color: #333;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+    }
+
+    label {
+      margin-bottom: 5px;
+      font-weight: 600;
+    }
+
+    input {
+      padding: 10px;
+      margin-bottom: 20px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      font-size: 1rem;
+    }
+
+    button {
+      padding: 14px;
+      background-color: #ff69b4;
+      color: white;
+      font-size: 1.1rem;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    button:hover {
+      background-color: #e91e63;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>Bloom Bliss</h1>
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="shop.html">Shop</a>
+    <a href="cart.html">Cart</a>
+  </nav>
+</header>
+
+<h2>Checkout</h2>
+
+<div class="checkout-container">
+  <div class="order-summary">
+    <h3>Your Order</h3>
+    <ul id="orderItems"></ul>
+    <div class="total-amount" id="orderTotal">Total: ₹0</div>
+  </div>
+
+  <form onsubmit="placeOrder(event)">
+    <label for="name">Full Name</label>
+    <input type="text" id="name" required>
+
+    <label for="address">Delivery Address</label>
+    <input type="text" id="address" required>
+
+    <label for="email">Email</label>
+    <input type="email" id="email" required>
+
+    <button type="submit">Place Order</button>
+  </form>
+</div>
+
+<script>
+  const orderItemsEl = document.getElementById("orderItems");
+  const orderTotalEl = document.getElementById("orderTotal");
+
+  function loadOrder() {
+    const cart = JSON.parse(localStorage.getItem("cart")) || [];
+    let total = 0;
+    cart.forEach(item => {
+      const li = document.createElement("li");
+      li.innerHTML = `${item.name} x ${item.quantity}<span>₹${item.price * item.quantity}</span>`;
+      orderItemsEl.appendChild(li);
+      total += item.price * item.quantity;
+    });
+    orderTotalEl.textContent = `Total: ₹${total}`;
+  }
+
+  function placeOrder(event) {
+    event.preventDefault();
+    alert("Thank you! Your order has been placed.");
+    localStorage.removeItem("cart");
+    window.location.href = "index.html";
+  }
+
+  loadOrder();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Shop - Bloom Bliss</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(to bottom, #fff0f5, #ffffff);
+      color: #333;
+      min-height: 100vh;
+      padding: 20px 10%;
+      transition: background 0.5s ease, color 0.5s ease;
+    }
+    body.dark-mode {
+      background: #121212;
+      color: #eee;
+    }
+    header {
+      position: sticky;
+      top: 0;
+      background-color: #fff0f5;
+      padding: 15px 10%;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 1000;
+      transition: background-color 0.5s;
+    }
+    body.dark-mode header {
+      background-color: #1f1f1f;
+    }
+    header h1 {
+      font-size: 1.8rem;
+      color: #d63384;
+      font-weight: 700;
+      cursor: default;
+    }
+    nav a {
+      margin-left: 30px;
+      font-weight: 600;
+      color: #d63384;
+      transition: color 0.3s ease;
+    }
+    nav a:hover {
+      color: #b51262;
+    }
+    .dark-toggle {
+      margin-left: 20px;
+      background-color: #d63384;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      padding: 7px 14px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: background-color 0.3s ease;
+    }
+    .dark-toggle:hover {
+      background-color: #b51262;
+    }
+
+    h1 {
+      color: #d63384;
+      margin-bottom: 25px;
+      font-weight: 700;
+      text-align: center;
+    }
+    .product-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fit,minmax(250px,1fr));
+      gap: 25px;
+    }
+    .product {
+      background: white;
+      border-radius: 15px;
+      padding: 15px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      text-align: center;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      cursor: default;
+    }
+    .product:hover {
+      transform: scale(1.05);
+      box-shadow: 0 8px 30px rgba(214, 51, 132, 0.4);
+      cursor: pointer;
+    }
+    .product img {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+      border-radius: 15px;
+      margin-bottom: 10px;
+      user-select: none;
+    }
+    .product h3 {
+      color: #d63384;
+      margin-bottom: 10px;
+      font-weight: 700;
+    }
+    .price {
+      font-weight: 700;
+      font-size: 1.1rem;
+      margin-bottom: 12px;
+    }
+    button {
+      background: #ff69b4;
+      color: white;
+      border: none;
+      padding: 12px 28px;
+      border-radius: 30px;
+      cursor: pointer;
+      font-weight: 700;
+      font-size: 1rem;
+      transition: background-color 0.3s ease, transform 0.3s ease;
+      user-select: none;
+    }
+    button:hover {
+      background: #e91e63;
+      transform: scale(1.1);
+      box-shadow: 0 6px 16px rgba(233,30,99,0.6);
+    }
+
+    /* Responsive */
+    @media (max-width: 600px) {
+      header {
+        padding: 15px 5%;
+      }
+      nav a {
+        margin-left: 15px;
+        font-size: 0.9rem;
+      }
+      .product-list {
+        gap: 15px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>Bloom Bliss</h1>
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="cart.html">Cart</a>
+    <button class="dark-toggle" onclick="toggleDarkMode()">Dark Mode</button>
+  </nav>
+</header>
+
+<h1>Shop Flowers</h1>
+
+<div class="product-list" id="productList"></div>
+
+<script>
+  const products = [
+    {
+      name: 'Rose Bouquet',
+      price: 499,
+      image: 'https://images.unsplash.com/photo-1501004318641-b39e6451bec6?auto=format&fit=crop&w=500&q=80'
+    },
+    {
+      name: 'Sunflower Delight',
+      price: 399,
+      image: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=500&q=80'
+    },
+    {
+      name: 'Tulip Garden',
+      price: 299,
+      image: 'https://images.unsplash.com/photo-1494526585095-c41746248156?auto=format&fit=crop&w=500&q=80'
+    },
+    {
+      name: 'Orchid Elegance',
+      price: 599,
+      image: 'https://images.unsplash.com/photo-1565372917012-4f6e9ec8b922?auto=format&fit=crop&w=500&q=80'
+    }
+  ];
+
+  const productListEl = document.getElementById('productList');
+
+  function renderProducts() {
+    products.forEach(product => {
+      const productEl = document.createElement('div');
+      productEl.className = 'product';
+      productEl.innerHTML = `
+        <img src="${product.image}" alt="${product.name}" draggable="false" />
+        <h3>${product.name}</h3>
+        <div class="price">₹${product.price}</div>
+        <button onclick="addToCart('${product.name}', ${product.price})">Add to Cart</button>
+      `;
+      productListEl.appendChild(productEl);
+    });
+  }
+
+  function addToCart(name, price) {
+    let cart = JSON.parse(localStorage.getItem('cart')) || [];
+    const index = cart.findIndex(item => item.name === name);
+    if (index >= 0) {
+      cart[index].quantity += 1;
+    } else {
+      cart.push({ name, price, quantity: 1 });
+    }
+    localStorage.setItem('cart', JSON.stringify(cart));
+    alert(`${name} added to cart!`);
+  }
+
+  function toggleDarkMode() {
+    document.body.classList.toggle('dark-mode');
+  }
+
+  renderProducts();
+</script>
+
+</body>
+</html>
+
